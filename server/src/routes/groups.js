@@ -18,7 +18,7 @@ router.get('/', async (req,res)=>{
         })
 
 if(name){
-let pGroup = all.filter(g => g.name.toLowerCase().includes(name.toLowerCase()));
+let pGroup = await all.filter(g => g.name.toLowerCase().includes(name.toLowerCase()));
 if(pGroup.length > 0){
     return res.status(200).send(pGroup);
 } else {
@@ -46,3 +46,5 @@ router.get('/:id', async (req,res)=>{
         return res.status(404).send(`Error 404: Cant found group with id: ${id}`)
     }
 })
+
+module.exports = router;
