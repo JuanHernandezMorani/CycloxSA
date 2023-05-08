@@ -5,6 +5,7 @@ dotenv.config({ path: '../../.env'});
 
 const getProduct = async () => {
   try {
+    
     const list = [];
 
     for(let i = 1; i < 21; i++){
@@ -20,7 +21,7 @@ const getProduct = async () => {
     
     list.map(async (p) => {
       let group = await Group.findOne({where:{name: p.category}});
-      let product = await Product.create({
+      let product = await Product.findOrCreate({
         where:{
           name: p.title,
           image: p.image,
