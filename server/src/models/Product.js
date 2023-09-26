@@ -20,6 +20,10 @@ module.exports = (sequelize) => {
     description: {
       type: DataTypes.TEXT,
       defaultValue: "Description not found"
+    },
+    category: {
+      type: DataTypes.STRING,
+      defaultValue: "uncategorized"
     }
     ,
     official:{

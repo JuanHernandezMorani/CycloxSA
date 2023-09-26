@@ -16,18 +16,8 @@ try {
        await getProduct();
     }
 
-    let all = await Product.findAll({
-       
-      order: ['id'],
-        include: [{
-            model: Group,
-            attributes: ['name'],
-            through: {
-                attributes: [],
-            }
-        }]
-       
-    })
+    let all = await Product.findAll({ order: ['id'] })
+
 if(name){
     let pName = all.filter(p => p.name.toLowerCase().includes(name.toLocaleLowerCase()))
 if(pName.length > 0){
@@ -47,14 +37,7 @@ if(pName.length > 0){
 router.get('/:id', async (req,res)=>{
     const {id} = req.params;
     let product = await Product.findOne({
-        where:{id: id},
-        include: [{
-            model: Group,
-            attributes: ['name'],
-            through: {
-                attributes: [],
-            }
-        }]
+        where:{id: id}
     })
 
     if(product){
@@ -65,25 +48,25 @@ router.get('/:id', async (req,res)=>{
 })
 
 router.post('/', async (req,res)=>{
-    let {name,price,image,group,description} = req.body;
+    let {name,price,image,category,description} = req.body;
 try {
-    if(!name){return res.status(409).send('Name is require')}
+    if(!name){return res.status(409).send('Name is require')};
 
     const exist = await Product.findOne({where: {name:name}});
-    if(exist){return res.status(409).send("There is an item with that name")}
+
+    if(exist){ return res.status(409).send("There is an item with that name") };
 
 const product = await Product.create({
     name,
     image,
     price,
     description,
+    category,
     official: false,
 });
-let pGroup = await Group.findAll({where:{name: group}})
 
-await product.addGroup(pGroup);
+return res.status(200).send('Item created: '+ product);
 
-return res.status(200).send('Item created')
 } catch (e) {
     return res.status(500).send(e.message)
 }
